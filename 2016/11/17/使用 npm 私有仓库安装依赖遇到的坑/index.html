@@ -6,17 +6,24 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge" >
   <link rel="dns-prefetch" href="http:/benbenye.github.io">
-  <title>Archives | Our Blog</title>
+  <title>使用 npm 私有仓库安装依赖遇到的坑 | Our Blog</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="enen">
-<meta property="og:type" content="website">
-<meta property="og:title" content="Our Blog">
-<meta property="og:url" content="http:/benbenye.github.io/archives/index.html">
+  <meta name="description" content="最近项目部署的时候时常遇到访问 npm 官方仓库网络抽疯的现象，决定尝试一下公司内部新搭建的私有仓库（使用的 cnpm）。切换个仓库这么简单的事没想到遇到两个大坑，记录一下：
+tarball url 指向不正确
+问题：用npm i --registry=https://rnpm.xxxxx.com xxx 命令安装时，结果却到 r.cnpmjs.org 这个域下面下载tar包。原因：仓库的regi">
+<meta property="og:type" content="article">
+<meta property="og:title" content="使用 npm 私有仓库安装依赖遇到的坑">
+<meta property="og:url" content="http:/benbenye.github.io/2016/11/17/使用 npm 私有仓库安装依赖遇到的坑/index.html">
 <meta property="og:site_name" content="Our Blog">
-<meta property="og:description" content="enen">
+<meta property="og:description" content="最近项目部署的时候时常遇到访问 npm 官方仓库网络抽疯的现象，决定尝试一下公司内部新搭建的私有仓库（使用的 cnpm）。切换个仓库这么简单的事没想到遇到两个大坑，记录一下：
+tarball url 指向不正确
+问题：用npm i --registry=https://rnpm.xxxxx.com xxx 命令安装时，结果却到 r.cnpmjs.org 这个域下面下载tar包。原因：仓库的regi">
+<meta property="og:updated_time" content="2017-01-05T10:30:00.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Our Blog">
-<meta name="twitter:description" content="enen">
+<meta name="twitter:title" content="使用 npm 私有仓库安装依赖遇到的坑">
+<meta name="twitter:description" content="最近项目部署的时候时常遇到访问 npm 官方仓库网络抽疯的现象，决定尝试一下公司内部新搭建的私有仓库（使用的 cnpm）。切换个仓库这么简单的事没想到遇到两个大坑，记录一下：
+tarball url 指向不正确
+问题：用npm i --registry=https://rnpm.xxxxx.com xxx 命令安装时，结果却到 r.cnpmjs.org 这个域下面下载tar包。原因：仓库的regi">
   
     <link rel="alternative" href="/atom.xml" title="Our Blog" type="application/atom+xml">
   
@@ -138,221 +145,170 @@
             <canvas data-colors="#eaeaea" data-sectionHeight="100" data-contentId="js-content" id="myCanvas1" class="anm-canvas"></canvas>
           </div>
           <div id="js-content" class="content-ll">
-            
-  
-  
+            <article id="post-使用 npm 私有仓库安装依赖遇到的坑" class="article article-type-post " itemscope itemprop="blogPost">
+  <div class="article-inner">
     
-    
-      
-      
-      <section class="archives-wrap">
-        <div class="archive-year-wrap">
-          <a href="/archives/2017" class="archive-year">2017</a>
-        </div>
-        <div class="archives">
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2017/01/03/TODO-4：nodejs 实现一部漫画爬取/" class="archive-article-date">
-  	<time datetime="2017-01-03T07:23:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-01-03</time>
-</a>
-        </div>
-    	 
+      <header class="article-header">
+        
   
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2017/01/03/TODO-4：nodejs 实现一部漫画爬取/">TODO-4：nodejs 实现一部漫画爬取</a>
+    <h1 class="article-title" itemprop="name">
+      使用 npm 私有仓库安装依赖遇到的坑
     </h1>
   
 
-        <div class="article-info info-on-right">
-          
-          
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-    
-    
-      
-        </div></section>
-      
-      
-      <section class="archives-wrap">
-        <div class="archive-year-wrap">
-          <a href="/archives/2016" class="archive-year">2016</a>
-        </div>
-        <div class="archives">
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2016/11/17/使用 npm 私有仓库安装依赖遇到的坑/" class="archive-article-date">
+        
+        <a href="/2016/11/17/使用 npm 私有仓库安装依赖遇到的坑/" class="archive-article-date">
   	<time datetime="2016-11-17T09:14:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2016-11-17</time>
 </a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2016/11/17/使用 npm 私有仓库安装依赖遇到的坑/">使用 npm 私有仓库安装依赖遇到的坑</a>
-    </h1>
-  
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>最近项目部署的时候时常遇到访问 npm 官方仓库网络抽疯的现象，决定尝试一下公司内部新搭建的私有仓库（使用的 <a href="https://github.com/cnpm/cnpmjs.org" target="_blank" rel="external">cnpm</a>）。切换个仓库这么简单的事没想到遇到两个大坑，记录一下：</p>
+<p>tarball url 指向不正确</p>
+<p>问题：用<code>npm i --registry=https://rnpm.xxxxx.com xxx</code> 命令安装时，结果却到 r.cnpmjs.org 这个域下面下载tar包。<br>原因：仓库的<code>registryHost</code>配置错误。</p>
+<p>项目部署的时候大部分依赖包还是去官方仓库下载</p>
+<p>问题：使用<code>npm i --registry=https://rnpm.xxxxx.com</code>命令安装依赖的时候发现<code>registry</code>参数似乎不起作用，绝大多数包居然又到官方的仓库去拉取数据（包括 metadata 和 tarball），但奇怪的是居然还有两三个包是正常的到 <code>rnpm.xxxxx.com</code> 域去下载数据了。</p>
+<p>原因：因为用 <code>npm shrinkwrap</code> 命令锁定了依赖，而 <code>npm-shrinkwrap.json</code> 里有个 <code>resolved</code>字段，这个字段指定了tarball下载的地址，npm使用这个地址下载了真正的依赖包。</p>
+<p>解决办法：目前还没有好的解决办法，暂时先替换掉<code>resolved</code>字段里的 url，npm@5之后的版本应该会提供一个优雅的解决方案。<br>s替换url的方法：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">sed -i -- <span class="string">'s/https:\/\/registry\.npmjs\.org/https:\/\/rnpm\.xxxxx\.com/g'</span> npm-shrinkwrap.json</div></pre></td></tr></table></figure>
+<p>其他的方案还有: <a href="https://www.npmjs.com/package/rewrite-shrinkwrap-urls" target="_blank" rel="external">shonkwrap rewrite-shrinkwrap-urls</a></p>
+<p>参考：<br><a href="https://github.com/npm/npm/issues/6445" target="_blank" rel="external">https://github.com/npm/npm/issues/6445</a></p>
+<p><a href="https://github.com/npm/npm/issues/6324" target="_blank" rel="external">https://github.com/npm/npm/issues/6324</a></p>
+<p><a href="http://blog.npmjs.org/post/145724408060/dealing-with-problematic-dependencies-in-a" target="_blank" rel="external">http://blog.npmjs.org/post/145724408060/dealing-with-problematic-dependencies-in-a</a></p>
+<p><a href="https://support.sonatype.com/hc/en-us/articles/213465048-Why-does-npm-client-need-access-to-URLs-other-than-my-private-registry-" target="_blank" rel="external">https://support.sonatype.com/hc/en-us/articles/213465048-Why-does-npm-client-need-access-to-URLs-other-than-my-private-registry-</a></p>
+<p><a href="http://stackoverflow.com/questions/33682804/why-does-npm-install-use-the-shrinkwraps-resolved-property" target="_blank" rel="external">http://stackoverflow.com/questions/33682804/why-does-npm-install-use-the-shrinkwraps-resolved-property</a></p>
 
-        <div class="article-info info-on-right">
-          
-          
+      
 
+      
+        <div class="page-reward">
+          <a href="javascript:;" class="page-reward-btn tooltip-top">
+            <div class="tooltip tooltip-east">
+            <span class="tooltip-item">
+              赏
+            </span>
+            <span class="tooltip-content">
+              <span class="tooltip-text">
+                <span class="tooltip-inner">
+                  <p class="reward-p"><i class="icon icon-quo-left"></i>谢谢你请我吃糖果<i class="icon icon-quo-right"></i></p>
+                  <div class="reward-box">
+                    
+                    <div class="reward-box-item">
+                      <img class="reward-img" src="/img/zhifubao.png">
+                      <span class="reward-type">支付宝</span>
+                    </div>
+                    
+                    
+                    <div class="reward-box-item">
+                      <img class="reward-img" src="/img/weixin.png">
+                      <span class="reward-type">微信</span>
+                    </div>
+                    
+                  </div>
+                </span>
+              </span>
+            </span>
+          </div>
+          </a>
         </div>
-        <div class="clearfix"></div>
-    </header>
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+      
+
+      
+
+      
+        
+<div class="share-btn share-icons tooltip-left">
+  <div class="tooltip tooltip-east">
+    <span class="tooltip-item">
+      <a href="javascript:;" class="share-sns share-outer">
+        <i class="icon icon-share"></i>
+      </a>
+    </span>
+    <span class="tooltip-content">
+      <div class="share-wrap">
+        <div class="share-icons">
+          <a class="weibo share-sns" href="javascript:;" data-type="weibo">
+            <i class="icon icon-weibo"></i>
+          </a>
+          <a class="weixin share-sns wxFab" href="javascript:;" data-type="weixin">
+            <i class="icon icon-weixin"></i>
+          </a>
+          <a class="qq share-sns" href="javascript:;" data-type="qq">
+            <i class="icon icon-qq"></i>
+          </a>
+          <a class="douban share-sns" href="javascript:;" data-type="douban">
+            <i class="icon icon-douban"></i>
+          </a>
+          <a class="qzone share-sns" href="javascript:;" data-type="qzone">
+            <i class="icon icon-qzone"></i>
+          </a>
+          <a class="facebook share-sns" href="javascript:;" data-type="facebook">
+            <i class="icon icon-facebook"></i>
+          </a>
+          <a class="twitter share-sns" href="javascript:;" data-type="twitter">
+            <i class="icon icon-twitter"></i>
+          </a>
+          <a class="google share-sns" href="javascript:;" data-type="google">
+            <i class="icon icon-google"></i>
+          </a>
+        </div>
+      </div>
+    </span>
+  </div>
+</div>
+
+<div class="page-modal wx-share js-wx-box">
+    <a class="close js-modal-close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <div class="wx-qrcode">
+      <img src="http://s.jiathis.com/qrcode.php?url=http:http:/benbenye.github.io/2016/11/17/使用 npm 私有仓库安装依赖遇到的坑/" alt="微信分享二维码">
+    </div>
+</div>
+
+<div class="mask js-mask"></div>
+      
+      <div class="clearfix"></div>
+    </div>
   </div>
 </article>
+
   
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2016/11/14/TODO-3：css relative and absolute/" class="archive-article-date">
-  	<time datetime="2016-11-14T03:42:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2016-11-14</time>
-</a>
-        </div>
-    	 
+<nav id="article-nav">
   
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2016/11/14/TODO-3：css relative and absolute/">TODO-3：css relative and absolute</a>
-    </h1>
+    <a href="/2017/01/03/TODO-4：nodejs 实现一部漫画爬取/" id="article-nav-newer" class="article-nav-link-wrap">
+      <i class="icon-circle-left"></i>
+      <div class="article-nav-title">
+        
+          TODO-4：nodejs 实现一部漫画爬取
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2016/11/14/TODO-3：css relative and absolute/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">TODO-3：css relative and absolute</div>
+      <i class="icon-circle-right"></i>
+    </a>
+  
+</nav>
+
+
+
+
+
+
+  
+    <div class="duoshuo"></div>
   
 
-        <div class="article-info info-on-right">
-          
-          
 
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2016/10/29/linux 下使用"n"配置使用淘宝镜像/" class="archive-article-date">
-  	<time datetime="2016-10-29T04:16:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2016-10-29</time>
-</a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2016/10/29/linux 下使用"n"配置使用淘宝镜像/">linux 下使用&quot;n&quot;配置使用淘宝镜像</a>
-    </h1>
-  
-
-        <div class="article-info info-on-right">
-          
-          
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2016/09/13/TODO-2：浏览器唤醒APP/" class="archive-article-date">
-  	<time datetime="2016-09-13T08:09:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2016-09-13</time>
-</a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2016/09/13/TODO-2：浏览器唤醒APP/">TODO-2：浏览器唤醒APP</a>
-    </h1>
-  
-
-        <div class="article-info info-on-right">
-          
-          
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2016/09/01/TODO-1：数组去重方法大全/" class="archive-article-date">
-  	<time datetime="2016-09-01T05:10:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2016-09-01</time>
-</a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2016/09/01/TODO-1：数组去重方法大全/">TODO-1：数组去重方法大全</a>
-    </h1>
-  
-
-        <div class="article-info info-on-right">
-          
-          
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2016/07/22/fadora 23 dnf 更新错误/" class="archive-article-date">
-  	<time datetime="2016-07-22T00:29:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2016-07-22</time>
-</a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2016/07/22/fadora 23 dnf 更新错误/">fadora 23 dnf 更新错误</a>
-    </h1>
-  
-
-        <div class="article-info info-on-right">
-          
-          
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-  
-    </div></section>
-  
-
-    
 
 
           </div>
@@ -375,8 +331,8 @@
 	var yiliaConfig = {
 		mathjax: false,
 		isHome: false,
-		isPost: false,
-		isArchive: true,
+		isPost: true,
+		isArchive: false,
 		isTag: false,
 		isCategory: false,
 		open_in_new: false,

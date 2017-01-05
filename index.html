@@ -140,35 +140,105 @@
           <div id="js-content" class="content-ll">
             
   
-    <article id="post-hello-world" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+    <article id="post-TODO-4：nodejs 实现一部漫画爬取" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
       <header class="article-header">
         
   
     <h1 itemprop="name">
-      <a class="article-title" href="/2017/01/05/hello-world/">Hello World</a>
+      <a class="article-title" href="/2017/01/03/TODO-4：nodejs 实现一部漫画爬取/">TODO-4：nodejs 实现一部漫画爬取</a>
     </h1>
   
 
         
-        <a href="/2017/01/05/hello-world/" class="archive-article-date">
-  	<time datetime="2017-01-05T08:18:22.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-01-05</time>
+        <a href="/2017/01/03/TODO-4：nodejs 实现一部漫画爬取/" class="archive-article-date">
+  	<time datetime="2017-01-03T07:23:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-01-03</time>
 </a>
         
       </header>
     
     <div class="article-entry" itemprop="articleBody">
       
-        <p>Welcome to <a href="https://hexo.io/" target="_blank" rel="external">Hexo</a>! This is your very first post. Check <a href="https://hexo.io/docs/" target="_blank" rel="external">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a href="https://hexo.io/docs/troubleshooting.html" target="_blank" rel="external">troubleshooting</a> or you can ask me on <a href="https://github.com/hexojs/hexo/issues" target="_blank" rel="external">GitHub</a>.</p>
-<h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ hexo new <span class="string">"My New Post"</span></div></pre></td></tr></table></figure>
-<p>More info: <a href="https://hexo.io/docs/writing.html" target="_blank" rel="external">Writing</a></p>
-<h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ hexo server</div></pre></td></tr></table></figure>
-<p>More info: <a href="https://hexo.io/docs/server.html" target="_blank" rel="external">Server</a></p>
-<h3 id="Generate-static-files"><a href="#Generate-static-files" class="headerlink" title="Generate static files"></a>Generate static files</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ hexo generate</div></pre></td></tr></table></figure>
-<p>More info: <a href="https://hexo.io/docs/generating.html" target="_blank" rel="external">Generating</a></p>
-<h3 id="Deploy-to-remote-sites"><a href="#Deploy-to-remote-sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ hexo deploy</div></pre></td></tr></table></figure>
-<p>More info: <a href="https://hexo.io/docs/deployment.html" target="_blank" rel="external">Deployment</a></p>
+        <p>很早之前一直很喜欢听一些有声评书，当时为了找这些音频也是煞费苦心。但是找的过程中也发现，我每次下载音频的时候都是在重复同样的操作，所以也想过是不是可以用程序实现。那时候并没有很强的意念去实现是这个工具，所以只是停留在了想的层面。</p>
+<p>前不久无意发现一部感觉不错的动漫《镇魂街》，看了动画片之后觉得不过瘾，又发现官方的漫画版还挺有看头的，于是又从头开始后撸漫画，但是发现一页一页的翻翻找找好累，所以又想着把这些图片一次性down下来该多爽。<br>正巧手头有个ng2的项目，于是借助这个框架开始尝试爬取这部漫画，没有广告，没有连接，简单粗暴直接看图。</p>
+<p>抓取网页的几个必要工具先罗列一下： </p>
+<ol>
+<li>superagent github 地址 代替客户端发起请求； </li>
+<li>cheerio github地址 解析html </li>
+<li>fs node 的文件系统模块</li>
+</ol>
+<p>首先找个稳定点的网站用来抓取，不然刚研究好怎么解析这个网站下的页面，结果页面不稳定，白费力气。<br>解析的思路一定是顺序的，首先要把一部漫画的章节找出来，然后根据每个章节下载里面的图片。</p>
+<p>下面说说我在抓取的过程遇到的几个小问题：<br>1：编码问题；<br>默认情况下superagent是utf-8的编码，但是如果遇到网站的编码不是utf-8就会出现抓取下来的页面都是乱码，自然就不好解析了。<br>所以出现这种情况的时候，可以在发起请求的时候添加编码设置，这就涉及到了第四个必要工具：superagent-charset，github地址，防止乱码用的。<br>2：请求头的问题；<br>一般这种网站都会有防盗链的措施，所以如果随意请求，很快就会被反套路，所以最安全的方案就是用浏览器打开需要抓取的页面，找到相应的网络请求头，全copy下来，不过要特别注意一下有的Referer这个字段是固定的连接，但是有的是根据章节，每个章节不同。<br>3：请求‘顺序’还是‘并发’<br>最初使用并发的形式抓取，但是会出现抓取的图片不全的现象。这种情况还不是很清楚什么原因导致的。不过转为顺序并且把每次请求都间隔了一定时间，尽量的模仿实际人工请求，没有出现抓取不全的现象。</p>
+<p>下面是主要代码逻辑：</p>
+<p>用来统一设置请求头的方法：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">makeReuest</span>(<span class="params">option</span>)</span>&#123;</div><div class="line">    <span class="keyword">return</span>  request.get(option.url).charset(<span class="string">'gbk'</span>)</div><div class="line">    .set(<span class="string">'Accept'</span>,<span class="string">'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8'</span>)</div><div class="line">      <span class="comment">// .set('Accept-Encoding','gzip, deflate, sdch')</span></div><div class="line">      .set(<span class="string">'Accept-Language'</span>,<span class="string">'zh-CN,zh;q=0.8,en;q=0.6'</span>)</div><div class="line">      .set(<span class="string">'Cache-Control'</span>,<span class="string">'no-cache'</span>)</div><div class="line">      .set(<span class="string">'Connection'</span>,<span class="string">'keep-alive'</span>)</div><div class="line">      .set(<span class="string">'Cookie'</span>,option.cookie)</div><div class="line">      .set(<span class="string">'Host'</span>,option.host)</div><div class="line">      .set(<span class="string">'Pragma'</span>,<span class="string">'no-cache'</span>)</div><div class="line">      .set(<span class="string">'Referer'</span>,option.referer)</div><div class="line">      <span class="comment">// .set('Upgrade-Insecure-Requests','1')</span></div><div class="line">      .set(<span class="string">'User-Agent'</span>,<span class="string">'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_10_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/54.0.2840.98 Safari/537.36'</span>)</div><div class="line">      .catch(option.cb);</div><div class="line">  &#125;</div></pre></td></tr></table></figure>
+<p>所有callback转为promise形式<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">module</span>.exports = <span class="function"><span class="keyword">function</span> (<span class="params">func, option = &#123;&#125;</span>) </span>&#123;</div><div class="line">  <span class="keyword">return</span> <span class="function">(<span class="params">...arg</span>) =&gt;</span> <span class="keyword">new</span> <span class="built_in">Promise</span>(<span class="function">(<span class="params">resolve, reject</span>) =&gt;</span> &#123;</div><div class="line">    <span class="keyword">return</span> func.apply(option.context, [...arg, (err, ...data) =&gt; &#123;</div><div class="line">      <span class="keyword">if</span> (err) &#123;</div><div class="line">        <span class="keyword">return</span> reject(err);</div><div class="line">      &#125;</div><div class="line">      <span class="keyword">if</span> (option.multiArg) &#123;</div><div class="line">        <span class="keyword">return</span> resolve(data)</div><div class="line">      &#125;</div><div class="line">      <span class="keyword">return</span> resolve(data[<span class="number">0</span>]);</div><div class="line">    &#125;]);</div><div class="line">  &#125;)</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>写文件逻辑：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">const</span> writeFileAsync = promisify(fs.writeFile);</div><div class="line"><span class="keyword">const</span> mkdirAsync = promisify(fs.mkdir);</div><div class="line"></div><div class="line">writeFileAsync(imgPath, _picRes.body)</div><div class="line">        .then(<span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</div><div class="line">          <span class="built_in">console</span>.log(<span class="string">'write OK:'</span>, imgPath)</div><div class="line">        &#125;)</div><div class="line">        .catch(<span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</div><div class="line">          <span class="built_in">console</span>.log(<span class="string">'write err:'</span>, imgPath)</div><div class="line">          mkdirAsync(path)</div><div class="line">            .then(<span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</div><div class="line">              <span class="keyword">return</span> writeFileAsync(imgPath, _picRes.body)</div><div class="line">            &#125;)</div><div class="line">            .then(<span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</div><div class="line">               <span class="built_in">console</span>.log(<span class="string">'write file retry finished:'</span>, imgPath)</div><div class="line">            &#125;)</div><div class="line">            .catch(<span class="function"><span class="keyword">function</span> (<span class="params">err</span>) </span>&#123;</div><div class="line">              <span class="built_in">console</span>.log(<span class="string">'retry err'</span>, err)</div><div class="line">              <span class="keyword">throw</span>  err;</div><div class="line">            &#125;);</div><div class="line">        &#125;);</div></pre></td></tr></table></figure>
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2017/01/03/TODO-4：nodejs 实现一部漫画爬取/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+
+
+
+
+
+
+
+  
+    <article id="post-使用 npm 私有仓库安装依赖遇到的坑" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2016/11/17/使用 npm 私有仓库安装依赖遇到的坑/">使用 npm 私有仓库安装依赖遇到的坑</a>
+    </h1>
+  
+
+        
+        <a href="/2016/11/17/使用 npm 私有仓库安装依赖遇到的坑/" class="archive-article-date">
+  	<time datetime="2016-11-17T09:14:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2016-11-17</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>最近项目部署的时候时常遇到访问 npm 官方仓库网络抽疯的现象，决定尝试一下公司内部新搭建的私有仓库（使用的 <a href="https://github.com/cnpm/cnpmjs.org" target="_blank" rel="external">cnpm</a>）。切换个仓库这么简单的事没想到遇到两个大坑，记录一下：</p>
+<p>tarball url 指向不正确</p>
+<p>问题：用<code>npm i --registry=https://rnpm.xxxxx.com xxx</code> 命令安装时，结果却到 r.cnpmjs.org 这个域下面下载tar包。<br>原因：仓库的<code>registryHost</code>配置错误。</p>
+<p>项目部署的时候大部分依赖包还是去官方仓库下载</p>
+<p>问题：使用<code>npm i --registry=https://rnpm.xxxxx.com</code>命令安装依赖的时候发现<code>registry</code>参数似乎不起作用，绝大多数包居然又到官方的仓库去拉取数据（包括 metadata 和 tarball），但奇怪的是居然还有两三个包是正常的到 <code>rnpm.xxxxx.com</code> 域去下载数据了。</p>
+<p>原因：因为用 <code>npm shrinkwrap</code> 命令锁定了依赖，而 <code>npm-shrinkwrap.json</code> 里有个 <code>resolved</code>字段，这个字段指定了tarball下载的地址，npm使用这个地址下载了真正的依赖包。</p>
+<p>解决办法：目前还没有好的解决办法，暂时先替换掉<code>resolved</code>字段里的 url，npm@5之后的版本应该会提供一个优雅的解决方案。<br>s替换url的方法：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">sed -i -- <span class="string">'s/https:\/\/registry\.npmjs\.org/https:\/\/rnpm\.xxxxx\.com/g'</span> npm-shrinkwrap.json</div></pre></td></tr></table></figure>
+<p>其他的方案还有: <a href="https://www.npmjs.com/package/rewrite-shrinkwrap-urls" target="_blank" rel="external">shonkwrap rewrite-shrinkwrap-urls</a></p>
+<p>参考：<br><a href="https://github.com/npm/npm/issues/6445" target="_blank" rel="external">https://github.com/npm/npm/issues/6445</a></p>
+<p><a href="https://github.com/npm/npm/issues/6324" target="_blank" rel="external">https://github.com/npm/npm/issues/6324</a></p>
+<p><a href="http://blog.npmjs.org/post/145724408060/dealing-with-problematic-dependencies-in-a" target="_blank" rel="external">http://blog.npmjs.org/post/145724408060/dealing-with-problematic-dependencies-in-a</a></p>
+<p><a href="https://support.sonatype.com/hc/en-us/articles/213465048-Why-does-npm-client-need-access-to-URLs-other-than-my-private-registry-" target="_blank" rel="external">https://support.sonatype.com/hc/en-us/articles/213465048-Why-does-npm-client-need-access-to-URLs-other-than-my-private-registry-</a></p>
+<p><a href="http://stackoverflow.com/questions/33682804/why-does-npm-install-use-the-shrinkwraps-resolved-property" target="_blank" rel="external">http://stackoverflow.com/questions/33682804/why-does-npm-install-use-the-shrinkwraps-resolved-property</a></p>
 
       
 
@@ -181,7 +251,287 @@
 
       
         <p class="article-more-link">
-          <a class="article-more-a" href="/2017/01/05/hello-world/">展开全文 >></a>
+          <a class="article-more-a" href="/2016/11/17/使用 npm 私有仓库安装依赖遇到的坑/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+
+
+
+
+
+
+
+  
+    <article id="post-TODO-3：css relative and absolute" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2016/11/14/TODO-3：css relative and absolute/">TODO-3：css relative and absolute</a>
+    </h1>
+  
+
+        
+        <a href="/2016/11/14/TODO-3：css relative and absolute/" class="archive-article-date">
+  	<time datetime="2016-11-14T03:42:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2016-11-14</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>css中很多属性都是很近似的，平时在项目中使用并不会太在意两者之间的区别，之前在css定位上吃过亏，这次细致的解析一下。</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">css position: fixed | static | absolute | relative | center | page | sticky</div></pre></td></tr></table></figure>
+<p><code>static</code> 和 <code>fixed</code> 的概念很简单，这里不做详细解释。</p>
+<p><code>center</code> <code>page</code> <code>sticky</code> 属于css3新增属性。</p>
+<p><code>relative</code> 相对定位，它的地位计算基于自身在文档中的位置，同时会占用文档流，使用<code>top</code> <code>right</code> <code>bottom</code> <code>left</code> 时不会影响到页面中其他元素的位置（除非在这个元素中含有带有定位的元素）。</p>
+<p><code>absolute</code> 绝对定位，它的定位计算基于父元素，父元素没有则向上追溯，直到body 应用了<code>absolute</code> 的元素会脱离文档流，不在页面中占位，使用<code>top</code> <code>right</code> <code>bottom</code> <code>left</code> 时也不会影响到页面中其他元素的位置（除非在这个元素中含有带有定位的元素）。</p>
+<p>下面是我写的关于<code>absolute</code> <code>relative</code> 的<a href="http://dabblet.com/gist/cd727f543cb129f9e0fa71214a7bc9b9%20" target="_blank" rel="external">demo</a></p>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2016/11/14/TODO-3：css relative and absolute/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+
+
+
+
+
+
+
+  
+    <article id="post-linux 下使用&quot;n&quot;配置使用淘宝镜像" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2016/10/29/linux 下使用"n"配置使用淘宝镜像/">linux 下使用&quot;n&quot;配置使用淘宝镜像</a>
+    </h1>
+  
+
+        
+        <a href="/2016/10/29/linux 下使用"n"配置使用淘宝镜像/" class="archive-article-date">
+  	<time datetime="2016-10-29T04:16:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2016-10-29</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>n 是 nodejs 版本管理器，鉴于国内网络环境，作如下配置用起来才会便捷.</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"><span class="comment"># ~/.bashrc 或 ~/.zshrc</span></div><div class="line"></div><div class="line"><span class="comment"># 使用淘宝 nodejs 镜像，注意末尾的'/'不能省略</span></div><div class="line"><span class="built_in">export</span> NODE_MIRROR=https://npm.taobao.org/dist/</div><div class="line"></div><div class="line"><span class="comment"># 建议 linux 用户配置 nodejs 安装目录，切换版本不用 root 权限</span></div><div class="line"><span class="built_in">export</span> N_PREFIX=<span class="variable">$HOME</span>/.n</div><div class="line"><span class="built_in">export</span> PATH=<span class="variable">$HOME</span>/.n/bin:<span class="variable">$PATH</span></div></pre></td></tr></table></figure>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2016/10/29/linux 下使用"n"配置使用淘宝镜像/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+
+
+
+
+
+
+
+  
+    <article id="post-TODO-2：浏览器唤醒APP" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2016/09/13/TODO-2：浏览器唤醒APP/">TODO-2：浏览器唤醒APP</a>
+    </h1>
+  
+
+        
+        <a href="/2016/09/13/TODO-2：浏览器唤醒APP/" class="archive-article-date">
+  	<time datetime="2016-09-13T08:09:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2016-09-13</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div><div class="line">78</div><div class="line">79</div><div class="line">80</div><div class="line">81</div><div class="line">82</div><div class="line">83</div><div class="line">84</div><div class="line">85</div><div class="line">86</div><div class="line">87</div><div class="line">88</div><div class="line">89</div><div class="line">90</div><div class="line">91</div><div class="line">92</div><div class="line">93</div><div class="line">94</div><div class="line">95</div><div class="line">96</div><div class="line">97</div><div class="line">98</div><div class="line">99</div><div class="line">100</div><div class="line">101</div><div class="line">102</div><div class="line">103</div><div class="line">104</div><div class="line">105</div><div class="line">106</div><div class="line">107</div><div class="line">108</div><div class="line">109</div><div class="line">110</div><div class="line">111</div><div class="line">112</div><div class="line">113</div><div class="line">114</div><div class="line">115</div><div class="line">116</div><div class="line">117</div><div class="line">118</div><div class="line">119</div><div class="line">120</div><div class="line">121</div><div class="line">122</div><div class="line">123</div><div class="line">124</div><div class="line">125</div><div class="line">126</div><div class="line">127</div><div class="line">128</div><div class="line">129</div><div class="line">130</div><div class="line">131</div><div class="line">132</div><div class="line">133</div><div class="line">134</div><div class="line">135</div><div class="line">136</div><div class="line">137</div><div class="line">138</div><div class="line">139</div><div class="line">140</div><div class="line">141</div><div class="line">142</div><div class="line">143</div><div class="line">144</div><div class="line">145</div><div class="line">146</div><div class="line">147</div><div class="line">148</div><div class="line">149</div><div class="line">150</div><div class="line">151</div><div class="line">152</div><div class="line">153</div><div class="line">154</div><div class="line">155</div><div class="line">156</div><div class="line">157</div><div class="line">158</div><div class="line">159</div><div class="line">160</div><div class="line">161</div><div class="line">162</div><div class="line">163</div><div class="line">164</div><div class="line">165</div><div class="line">166</div><div class="line">167</div><div class="line">168</div><div class="line">169</div><div class="line">170</div><div class="line">171</div><div class="line">172</div><div class="line">173</div><div class="line">174</div><div class="line">175</div><div class="line">176</div><div class="line">177</div><div class="line">178</div><div class="line">179</div><div class="line">180</div><div class="line">181</div><div class="line">182</div><div class="line">183</div><div class="line">184</div><div class="line">185</div><div class="line">186</div><div class="line">187</div><div class="line">188</div><div class="line">189</div><div class="line">190</div><div class="line">191</div><div class="line">192</div><div class="line">193</div><div class="line">194</div><div class="line">195</div><div class="line">196</div><div class="line">197</div><div class="line">198</div><div class="line">199</div><div class="line">200</div><div class="line">201</div><div class="line">202</div><div class="line">203</div><div class="line">204</div><div class="line">205</div><div class="line">206</div><div class="line">207</div><div class="line">208</div><div class="line">209</div><div class="line">210</div><div class="line">211</div><div class="line">212</div><div class="line">213</div><div class="line">214</div><div class="line">215</div><div class="line">216</div><div class="line">217</div><div class="line">218</div><div class="line">219</div><div class="line">220</div><div class="line">221</div><div class="line">222</div><div class="line">223</div><div class="line">224</div><div class="line">225</div><div class="line">226</div><div class="line">227</div><div class="line">228</div><div class="line">229</div><div class="line">230</div><div class="line">231</div><div class="line">232</div><div class="line">233</div><div class="line">234</div><div class="line">235</div><div class="line">236</div><div class="line">237</div><div class="line">238</div><div class="line">239</div><div class="line">240</div><div class="line">241</div><div class="line">242</div><div class="line">243</div><div class="line">244</div><div class="line">245</div><div class="line">246</div><div class="line">247</div><div class="line">248</div><div class="line">249</div><div class="line">250</div><div class="line">251</div><div class="line">252</div><div class="line">253</div><div class="line">254</div><div class="line">255</div><div class="line">256</div><div class="line">257</div><div class="line">258</div><div class="line">259</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">(<span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</div><div class="line">  <span class="keyword">var</span> UA = navigator.userAgent;</div><div class="line">  <span class="keyword">var</span> isIPad = (UA.match(<span class="regexp">/(iPad).*OS\s([\d_]+)/</span>)) ? <span class="literal">true</span>: <span class="literal">false</span>;</div><div class="line">  <span class="keyword">var</span> isIPhone = (!isIPad &amp;&amp; UA.match(<span class="regexp">/(iPhone\sOS)\s([\d_]+)/</span>)) ? <span class="literal">true</span>: <span class="literal">false</span>;</div><div class="line">  <span class="keyword">var</span> isSafari = (isIPhone || isIPad) &amp;&amp; UA.match(<span class="regexp">/Safari/</span>);</div><div class="line">  <span class="keyword">var</span> SafariVersion = <span class="number">0</span>;</div><div class="line">  isSafari &amp;&amp; (SafariVersion = UA.match(<span class="regexp">/Version\/([\d\.]+)/</span>));</div><div class="line">  SafariVersion = <span class="built_in">parseFloat</span>(SafariVersion[<span class="number">1</span>], <span class="number">10</span>);</div><div class="line">  <span class="keyword">var</span> isWeixin = navigator.userAgent.indexOf(<span class="string">"MicroMessenger"</span>) &gt;= <span class="number">0</span>;</div><div class="line">  <span class="keyword">var</span> j = <span class="literal">false</span>;</div><div class="line">  <span class="keyword">var</span> s = <span class="string">"plugIn_downloadAppPlugIn_loadIframe"</span>;</div><div class="line">  <span class="keyword">var</span> t = <span class="literal">false</span>;</div><div class="line">  <span class="keyword">var</span> D = &#123;&#125;;</div><div class="line">  <span class="keyword">var</span> query = <span class="literal">null</span>;</div><div class="line">  <span class="keyword">var</span> J = &#123;&#125;;</div><div class="line">  <span class="keyword">var</span> isQuery = <span class="built_in">window</span>.Zepto || <span class="built_in">window</span>.jQuery ? <span class="literal">true</span>: <span class="literal">false</span>;</div><div class="line">  <span class="keyword">var</span> timerAry = [];</div><div class="line"></div><div class="line">  <span class="function"><span class="keyword">function</span> <span class="title">bindEvent</span>(<span class="params">P, O, N</span>) </span>&#123;</div><div class="line">    <span class="keyword">if</span> (isQuery) &#123;</div><div class="line">      query(<span class="string">"#"</span> + P).bind(O, N)</div><div class="line">    &#125; <span class="keyword">else</span> &#123;</div><div class="line">      query(<span class="string">"#"</span> + P).addEventListener(O, N, !<span class="number">1</span>)</div><div class="line">    &#125;</div><div class="line">  &#125;</div><div class="line">  <span class="keyword">if</span> (isQuery) &#123;</div><div class="line">    query = <span class="built_in">window</span>.$;</div><div class="line">    J = <span class="built_in">window</span>.$</div><div class="line">  &#125; <span class="keyword">else</span> &#123;</div><div class="line">    query = <span class="function"><span class="keyword">function</span>(<span class="params">N</span>) </span>&#123;</div><div class="line">      <span class="keyword">if</span> (<span class="keyword">typeof</span> N == <span class="string">"object"</span>) &#123;</div><div class="line">        <span class="keyword">return</span> N</div><div class="line">      &#125;</div><div class="line">      <span class="keyword">return</span> <span class="built_in">document</span>.querySelector(N)</div><div class="line">    &#125;;</div><div class="line">    <span class="keyword">if</span> (!<span class="built_in">window</span>.$) &#123;</div><div class="line">      <span class="built_in">window</span>.$ = J = query</div><div class="line">    &#125; <span class="keyword">else</span> &#123;</div><div class="line">      J = <span class="built_in">window</span>.$</div><div class="line">    &#125;</div><div class="line">  &#125;</div><div class="line">  <span class="built_in">window</span>.onblur = <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</div><div class="line">    <span class="keyword">for</span> (<span class="keyword">var</span> N = <span class="number">0</span>; N &lt; timerAry.length; N++) &#123;</div><div class="line">      clearTimeout(timerAry[N])</div><div class="line">    &#125;</div><div class="line">  &#125;;</div><div class="line">  <span class="function"><span class="keyword">function</span> <span class="title">getCookieByName</span>(<span class="params">P</span>) </span>&#123;</div><div class="line">    <span class="keyword">var</span> O = <span class="built_in">document</span>.cookie.indexOf(P + <span class="string">"="</span>);</div><div class="line">    <span class="keyword">if</span> (O == <span class="number">-1</span>) &#123;</div><div class="line">      <span class="keyword">return</span> <span class="string">""</span></div><div class="line">    &#125;</div><div class="line">    O = O + P.length + <span class="number">1</span>;</div><div class="line">    <span class="keyword">var</span> N = <span class="built_in">document</span>.cookie.indexOf(<span class="string">";"</span>, O);</div><div class="line">    <span class="keyword">if</span> (N == <span class="number">-1</span>) &#123;</div><div class="line">      N = <span class="built_in">document</span>.cookie.length</div><div class="line">    &#125;</div><div class="line">    <span class="keyword">return</span> <span class="built_in">document</span>.cookie.substring(O, N)</div><div class="line">  &#125;</div><div class="line">  <span class="function"><span class="keyword">function</span> <span class="title">setCookie</span>(<span class="params">P, R, N, S, Q</span>) </span>&#123;</div><div class="line">    <span class="keyword">var</span> T = P + <span class="string">"="</span> + <span class="built_in">escape</span>(R);</div><div class="line">    <span class="keyword">if</span> (N != <span class="string">""</span>) &#123;</div><div class="line">      <span class="keyword">var</span> O = <span class="keyword">new</span> <span class="built_in">Date</span>();</div><div class="line">      O.setTime(O.getTime() + N * <span class="number">24</span> * <span class="number">3600</span> * <span class="number">1000</span>);</div><div class="line">      T += <span class="string">";expires="</span> + O.toGMTString()</div><div class="line">    &#125;</div><div class="line">    <span class="keyword">if</span> (S != <span class="string">""</span>) &#123;</div><div class="line">      T += <span class="string">";path="</span> + S</div><div class="line">    &#125;</div><div class="line">    <span class="keyword">if</span> (Q != <span class="string">""</span>) &#123;</div><div class="line">      T += <span class="string">";domain="</span> + Q</div><div class="line">    &#125;</div><div class="line">    <span class="built_in">document</span>.cookie = T</div><div class="line">  &#125;</div><div class="line">  <span class="function"><span class="keyword">function</span> <span class="title">merageConfig</span>(<span class="params">N</span>) </span>&#123;</div><div class="line">    <span class="keyword">var</span> P = &#123;</div><div class="line">      <span class="attr">downAppURl</span>: <span class="string">"http://static.chunboimg.com/app/"</span>+$(<span class="string">'#andriod_app_download_version'</span>).val() || <span class="string">"ChunBoMall_2.5.2.apk"</span>,</div><div class="line">      <span class="attr">downAppIos</span>: <span class="string">"https://itunes.apple.com/us/app/chun-bo/id967139095?mt=8"</span>,</div><div class="line">      <span class="attr">downWeixin</span>: <span class="string">"http://www.chunbo.com/app/check_app_source"</span>,</div><div class="line">      <span class="attr">downIpad</span>: <span class="string">"https://itunes.apple.com/us/app/chun-bo/id967139095?mt=8"</span>,</div><div class="line">      <span class="attr">inteneUrl</span>: <span class="string">"chunbo://chunbo/startApp"</span>,</div><div class="line">      <span class="attr">inteneUrlParams</span>: <span class="literal">null</span>,</div><div class="line">      <span class="attr">inteneUrlPage</span>: <span class="number">3</span>,</div><div class="line">      <span class="attr">openAppBtnId</span>: <span class="string">""</span>,</div><div class="line">      <span class="attr">closePanelBtnId</span>: <span class="string">""</span>,</div><div class="line">      <span class="attr">closePanelId</span>: <span class="string">""</span>,</div><div class="line">      <span class="attr">closeCallblack</span>: <span class="literal">null</span>,</div><div class="line">      <span class="attr">closeCallblackSource</span>: <span class="literal">null</span>,</div><div class="line">      <span class="attr">cookieFlag</span>: <span class="literal">null</span>,</div><div class="line">      <span class="attr">noRecord</span>: <span class="literal">false</span>,</div><div class="line">      <span class="attr">sourceType</span>: <span class="string">"JSHOP_SOURCE_TYPE"</span>,</div><div class="line">      <span class="attr">sourceValue</span>: <span class="string">"JSHOP_SOURCE_VALUE"</span>,</div><div class="line">      <span class="attr">openAppEventId</span>: <span class="string">"MDownLoadFloat_OpenNow"</span>,</div><div class="line">      <span class="attr">closePanelEventId</span>: <span class="string">"MDownLoadFloat_Close"</span></div><div class="line">    &#125;;</div><div class="line">    <span class="keyword">if</span> (N) &#123;</div><div class="line">      <span class="keyword">for</span> (<span class="keyword">var</span> O <span class="keyword">in</span> N) &#123;</div><div class="line">        <span class="keyword">if</span> (O &amp;&amp; N[O]) &#123;</div><div class="line">          P[O] = N[O]</div><div class="line">        &#125;</div><div class="line">      &#125;</div><div class="line">    &#125;</div><div class="line">    <span class="keyword">return</span> P</div><div class="line">  &#125;</div><div class="line"></div><div class="line">  <span class="function"><span class="keyword">function</span> <span class="title">getSchemaUrlWithParams</span>(<span class="params">P</span>) </span>&#123;</div><div class="line">    <span class="keyword">var</span> Y = [];</div><div class="line">    <span class="keyword">var</span> S = P.inteneUrlParams;</div><div class="line">    <span class="keyword">var</span> ParamsStr = <span class="string">""</span>;</div><div class="line"></div><div class="line">    <span class="keyword">if</span> (S &amp;&amp; !S.sourceType &amp;&amp; !S.sourceValue) &#123;</div><div class="line">      S.sourceType = P.sourceType;</div><div class="line">      S.sourceValue = P.sourceValue</div><div class="line">    &#125;</div><div class="line">    <span class="keyword">if</span> (S) &#123;</div><div class="line">      <span class="keyword">for</span> (<span class="keyword">var</span> X <span class="keyword">in</span> S) &#123;</div><div class="line">        <span class="keyword">if</span> (X &amp;&amp; S[X]) &#123;</div><div class="line">          Y.push(<span class="string">'"'</span> + X + <span class="string">'":"'</span> + S[X] + <span class="string">'"'</span>)</div><div class="line">        &#125;</div><div class="line">      &#125;</div><div class="line">    &#125;</div><div class="line"><span class="comment">//            不调用默认参数,只有传参里面有值才添加到params</span></div><div class="line">    <span class="keyword">if</span> (Y.length) &#123;</div><div class="line">      <span class="keyword">var</span> O = <span class="string">"&#123;"</span> + Y.join(<span class="string">","</span>) + <span class="string">"&#125;"</span>;</div><div class="line">      ParamsStr = <span class="string">"&amp;params="</span> + O</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="keyword">return</span> (P.inteneUrl + <span class="string">"?page="</span> + P.inteneUrlPage + ParamsStr)</div><div class="line">  &#125;</div><div class="line">  <span class="function"><span class="keyword">function</span> <span class="title">tryOpenApp</span>(<span class="params">P, N</span>) </span>&#123;</div><div class="line">    <span class="keyword">var</span> T = getSchemaUrlWithParams(P);</div><div class="line">    <span class="keyword">var</span> Q = <span class="literal">null</span>;</div><div class="line">    <span class="keyword">if</span> (isWeixin) &#123;</div><div class="line">      <span class="keyword">var</span> O = <span class="literal">null</span>;</div><div class="line">      <span class="keyword">if</span> (j) &#123;</div><div class="line">        O = T</div><div class="line">      &#125; <span class="keyword">else</span> &#123;</div><div class="line">        O = P.downWeixin</div><div class="line">      &#125;</div><div class="line">      location.href = O;</div><div class="line">      <span class="keyword">return</span></div><div class="line">    &#125;</div><div class="line">    <span class="keyword">if</span> (isIPad) &#123;</div><div class="line">      Q = P.downIpad</div><div class="line">    &#125; <span class="keyword">else</span> &#123;</div><div class="line">      <span class="keyword">if</span> (isIPhone) &#123;</div><div class="line">        Q = P.downAppIos</div><div class="line">      &#125; <span class="keyword">else</span> &#123;</div><div class="line">        Q = P.downAppURl</div><div class="line">      &#125;</div><div class="line">    &#125;</div><div class="line">    <span class="keyword">if</span> (isSafari &amp;&amp; SafariVersion &gt;= <span class="number">9</span>) &#123;</div><div class="line">      setTimeout(<span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</div><div class="line">          <span class="keyword">var</span> U = <span class="built_in">document</span>.createElement(<span class="string">"a"</span>);</div><div class="line">          U.setAttribute(<span class="string">"href"</span>, T),</div><div class="line">            U.style.display = <span class="string">"none"</span>,</div><div class="line">            <span class="built_in">document</span>.body.appendChild(U);</div><div class="line">          <span class="keyword">var</span> V = <span class="built_in">document</span>.createEvent(<span class="string">"HTMLEvents"</span>);</div><div class="line">          V.initEvent(<span class="string">"click"</span>, !<span class="number">1</span>, !<span class="number">1</span>),</div><div class="line">            U.dispatchEvent(V)</div><div class="line">        &#125;,</div><div class="line">        <span class="number">0</span>)</div><div class="line">    &#125; <span class="keyword">else</span> &#123;</div><div class="line">      <span class="built_in">document</span>.querySelector(<span class="string">"#"</span> + s).src = T</div><div class="line">    &#125;</div><div class="line">    <span class="keyword">var</span> R = <span class="built_in">Date</span>.now();</div><div class="line">    setTimeout(<span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</div><div class="line">        <span class="keyword">if</span> (N) &#123;</div><div class="line">          <span class="keyword">var</span> U = setTimeout(<span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</div><div class="line">              openFailTryOpen(R, Q)</div><div class="line">            &#125;,</div><div class="line">            <span class="number">1500</span>);</div><div class="line">          timerAry.push(U)</div><div class="line">        &#125;</div><div class="line">      &#125;,</div><div class="line">      <span class="number">100</span>)</div><div class="line">  &#125;</div><div class="line">  <span class="function"><span class="keyword">function</span> <span class="title">openFailTryOpen</span>(<span class="params">P, O</span>) </span>&#123;</div><div class="line">    <span class="keyword">var</span> N = <span class="built_in">Date</span>.now();</div><div class="line">    <span class="keyword">if</span> (P &amp;&amp; (N - P) &lt; (<span class="number">1500</span> + <span class="number">200</span>)) &#123;</div><div class="line">      <span class="built_in">window</span>.location.href = O</div><div class="line">    &#125;</div><div class="line">  &#125;</div><div class="line"></div><div class="line">  <span class="function"><span class="keyword">function</span> <span class="title">bindOpenBtnClick</span>(<span class="params">N</span>) </span>&#123;</div><div class="line">    <span class="keyword">if</span> (N.openAppBtnId) &#123;</div><div class="line">      D[N.openAppBtnId] = N;</div><div class="line"><span class="comment">//                I(N.openAppBtnId, N.openAppEventId);</span></div><div class="line">      bindEvent(N.openAppBtnId, <span class="string">"click"</span>,</div><div class="line">        <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</div><div class="line">          <span class="keyword">var</span> R = <span class="keyword">this</span>.getAttribute(<span class="string">"id"</span>);</div><div class="line">          <span class="keyword">var</span> O = D[R];</div><div class="line">          <span class="keyword">if</span> (!t) &#123;</div><div class="line">            <span class="keyword">var</span> P = <span class="built_in">document</span>.createElement(<span class="string">"iframe"</span>);</div><div class="line">            P.id = s;</div><div class="line">            <span class="built_in">document</span>.body.appendChild(P);</div><div class="line">            <span class="built_in">document</span>.getElementById(s).style.display = <span class="string">"none"</span>;</div><div class="line">            <span class="built_in">document</span>.getElementById(s).style.width = <span class="string">"0px"</span>;</div><div class="line">            <span class="built_in">document</span>.getElementById(s).style.height = <span class="string">"0px"</span>;</div><div class="line">            t = <span class="literal">true</span></div><div class="line">          &#125;</div><div class="line">          <span class="keyword">var</span> Q = O.cookieFlag ? <span class="string">"downloadAppPlugIn_downCloseDate_"</span> + O.cookieFlag: <span class="string">"downloadAppPlugIn_downCloseDate"</span>;</div><div class="line">          setCookie(Q, <span class="built_in">Date</span>.now() + <span class="string">"_2592000000"</span>, <span class="number">1</span>, <span class="string">"/"</span>, <span class="string">".chunbo.com"</span>);</div><div class="line">          tryOpenApp(O, <span class="literal">true</span>)</div><div class="line">        &#125;)</div><div class="line">    &#125;</div><div class="line">  &#125;</div><div class="line">  <span class="function"><span class="keyword">function</span> <span class="title">bindCloseBtnClick</span> (<span class="params">O</span>) </span>&#123;</div><div class="line">    <span class="keyword">if</span> (O.closePanelBtnId &amp;&amp; O.closePanelId) &#123;</div><div class="line">      D[O.closePanelBtnId] = O;</div><div class="line"><span class="comment">//                I(O.closePanelBtnId, O.closePanelEventId);</span></div><div class="line">      <span class="keyword">var</span> S = O.cookieFlag ? <span class="string">"downloadAppPlugIn_downCloseDate_"</span> + O.cookieFlag: <span class="string">"downloadAppPlugIn_downCloseDate"</span>;</div><div class="line">      <span class="keyword">var</span> Q = getCookieByName(S);</div><div class="line">      <span class="keyword">var</span> R = <span class="literal">null</span>;</div><div class="line">      <span class="keyword">if</span> (Q) &#123;</div><div class="line">        R = Q.split(<span class="string">"_"</span>);</div><div class="line">        <span class="keyword">if</span> (R.length == <span class="number">2</span>) &#123;</div><div class="line">          R[<span class="number">0</span>] = <span class="built_in">parseInt</span>(R[<span class="number">0</span>], <span class="number">10</span>);</div><div class="line">          R[<span class="number">1</span>] = <span class="built_in">parseInt</span>(R[<span class="number">1</span>], <span class="number">10</span>)</div><div class="line">        &#125; <span class="keyword">else</span> &#123;</div><div class="line">          R = <span class="literal">null</span></div><div class="line">        &#125;</div><div class="line">      &#125;</div><div class="line">      <span class="keyword">var</span> N = <span class="built_in">Date</span>.now();</div><div class="line">      <span class="keyword">if</span> (!O.noRecord &amp;&amp; R &amp;&amp; R.length == <span class="number">2</span> &amp;&amp; (N - R[<span class="number">0</span>]) &lt; R[<span class="number">1</span>]) &#123;</div><div class="line">        <span class="built_in">document</span>.querySelector(<span class="string">"#"</span> + O.closePanelId).style.display = <span class="string">"none"</span>;</div><div class="line">        <span class="keyword">if</span> (O.closeCallblack) &#123;</div><div class="line">          <span class="keyword">var</span> P = O.closeCallblackSource ? O.closeCallblackSource: <span class="literal">null</span>;</div><div class="line">          O.closeCallblack.call(P)</div><div class="line">        &#125;</div><div class="line">        <span class="keyword">return</span></div><div class="line">      &#125; <span class="keyword">else</span> &#123;</div><div class="line">        <span class="built_in">document</span>.querySelector(<span class="string">"#"</span> + O.closePanelId).style.display = <span class="string">"block"</span></div><div class="line">      &#125;</div><div class="line">      bindEvent(O.closePanelBtnId, <span class="string">"click"</span>,</div><div class="line">        <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</div><div class="line">          <span class="keyword">var</span> W = <span class="keyword">this</span>.getAttribute(<span class="string">"id"</span>);</div><div class="line">          <span class="keyword">var</span> T = D[W];</div><div class="line">          <span class="keyword">var</span> V = T.cookieFlag ? <span class="string">"downloadAppPlugIn_downCloseDate_"</span> + T.cookieFlag: <span class="string">"downloadAppPlugIn_downCloseDate"</span>;</div><div class="line">          <span class="keyword">if</span> (!T.noRecord) &#123;</div><div class="line">            setCookie(V, <span class="built_in">Date</span>.now() + <span class="string">"_259200000"</span>, <span class="number">1</span>, <span class="string">"/"</span>, <span class="string">".chunbo.com"</span>);</div><div class="line">          &#125;</div><div class="line">          <span class="built_in">document</span>.querySelector(<span class="string">"#"</span> + T.closePanelId).style.display = <span class="string">"none"</span>;</div><div class="line">          <span class="keyword">if</span> (T.closeCallblack) &#123;</div><div class="line">            <span class="keyword">var</span> U = T.closeCallblackSource ? T.closeCallblackSource: <span class="literal">null</span>;</div><div class="line">            T.closeCallblack.call(U)</div><div class="line">          &#125;</div><div class="line">        &#125;)</div><div class="line">    &#125;</div><div class="line">  &#125;</div><div class="line"></div><div class="line"></div><div class="line">  <span class="function"><span class="keyword">function</span> <span class="title">E</span>(<span class="params">N</span>) </span>&#123;</div><div class="line">    <span class="keyword">var</span> config = merageConfig(N);</div><div class="line">    bindOpenBtnClick(config);</div><div class="line">    bindCloseBtnClick (config)</div><div class="line">  &#125;</div><div class="line">  J.downloadAppPlugIn = E;</div><div class="line">&#125;)();</div></pre></td></tr></table></figure>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2016/09/13/TODO-2：浏览器唤醒APP/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+
+
+
+
+
+
+
+  
+    <article id="post-TODO-1：数组去重方法大全" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2016/09/01/TODO-1：数组去重方法大全/">TODO-1：数组去重方法大全</a>
+    </h1>
+  
+
+        
+        <a href="/2016/09/01/TODO-1：数组去重方法大全/" class="archive-article-date">
+  	<time datetime="2016-09-01T05:10:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2016-09-01</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>前两天看到有一个人在总结面试的时候写到问到了数组去重，说是方法很多。一时手痒把我能想到的都写出来了。</p>
+<p>1、最传统的方法，“链式”检索，这个方法虽说是双层for循环嵌套，但是能够保留数组原有的顺序，对于有顺序要求的可以用这个，而且可以兼容低版本浏览器。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">let</span> ary = [<span class="number">2</span>,<span class="number">324</span>,<span class="number">35</span>,<span class="number">2</span>,<span class="number">36</span>,<span class="number">1</span>,<span class="number">2</span>,<span class="number">5</span>,<span class="number">3</span>,<span class="number">51</span>,<span class="number">31</span>,<span class="number">2</span>,<span class="number">5</span>,<span class="number">2</span>,<span class="number">24</span>,<span class="number">5</span>,<span class="number">46</span>,<span class="number">789</span>,<span class="number">0</span>,<span class="string">'2'</span>,<span class="string">'2'</span>];</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">uniq</span> (<span class="params">ary</span>)</span>&#123;</div><div class="line">    <span class="keyword">let</span> l = ary.length,</div><div class="line">        isRepeat = <span class="literal">false</span>,</div><div class="line">        res = [];</div><div class="line"></div><div class="line">    res[<span class="number">0</span>] = ary[<span class="number">0</span>];</div><div class="line"></div><div class="line">    <span class="keyword">for</span>(<span class="keyword">let</span> i = <span class="number">1</span>; i &lt; l; ++i)&#123;</div><div class="line">        isRepeat = <span class="literal">false</span>;</div><div class="line">        <span class="keyword">for</span>(<span class="keyword">let</span> j = <span class="number">0</span>; j &lt; res.length; ++j)&#123;</div><div class="line">            <span class="keyword">if</span>(res[j] === ary[i]) &#123;isRepeat =<span class="literal">true</span>; <span class="keyword">break</span>;&#125;</div><div class="line">        &#125;</div><div class="line">        !isRepeat &amp;&amp; res.push(ary[i])</div><div class="line">    &#125;</div><div class="line">    <span class="keyword">return</span> res;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>2、利用对象的属性不能重复的特性，但是对象的属性不能保留定义的时候的顺序，所以这个方法会破坏原有数组的顺序。</p>
+<p>tips:为了防止太多重复，之后的代码都只写关键部分，同时用了箭头函数。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">let</span> obj = &#123;&#125;;</div><div class="line"></div><div class="line">ary.forEach(<span class="function"><span class="params">e</span>=&gt;</span>&#123;</div><div class="line">    <span class="keyword">if</span>(obj[e] !== e) &#123;res.push(e);obj[e] = e;&#125;</div><div class="line">    <span class="keyword">return</span> <span class="literal">true</span>;</div><div class="line">&#125;)</div></pre></td></tr></table></figure>
+<p>3、在数组中检索，能够被检索到便认为是重复，思路感觉跟第一个方法略有些相似<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">res.push(ary[<span class="number">0</span>]);</div><div class="line">ary.forEach(<span class="function"><span class="params">e</span>=&gt;</span>&#123;</div><div class="line">    <span class="keyword">if</span>(res.indexOf(e) == <span class="number">-1</span>) &#123;res.push(e)&#125;</div><div class="line">&#125;)</div></pre></td></tr></table></figure></p>
+<p>4、先将数组排序，将相邻相同的值去掉，但是这个只适用于数据类型一致的数组。当然也破坏了原有的数组，如果想要不破坏数据源，可以先拷贝一份。<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">ary.sort().forEach(<span class="function">(<span class="params">e, i, array</span>)=&gt;</span>&#123;</div><div class="line">    <span class="keyword">if</span>(e !== array[i<span class="number">-1</span>]) res.push(e);</div><div class="line">&#125;)</div></pre></td></tr></table></figure></p>
+<p>5、利用数据的筛选和some等方法，主要思路同方法一，但是这个方法的效率应该是不如方法一的，毕竟每次都要拷贝一个新的数组。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">ary.filter((e, i, array)=&gt;!array.slice(i+1).some(ele=&gt;ele === e));</div></pre></td></tr></table></figure>
+<p>如果想要保证原有的顺序，可以先倒序数组。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">ary.reverse().filter(<span class="function">(<span class="params">e, i, array</span>)=&gt;</span>!array.slice(i+<span class="number">1</span>).some(<span class="function"><span class="params">ele</span>=&gt;</span>ele === e)).reverse();</div></pre></td></tr></table></figure>
+<p>6、最后一个是ES6提供的新的数据结构Set。它类似于数组，但是成员的值都是唯一的，没有重复的值。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">res = [ ...new <span class="built_in">Set</span>(ary)];</div></pre></td></tr></table></figure>
+<p>哈哈，是不是看起来炒鸡棒！</p>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2016/09/01/TODO-1：数组去重方法大全/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+
+
+
+
+
+
+
+  
+    <article id="post-fadora 23 dnf 更新错误" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2016/07/22/fadora 23 dnf 更新错误/">fadora 23 dnf 更新错误</a>
+    </h1>
+  
+
+        
+        <a href="/2016/07/22/fadora 23 dnf 更新错误/" class="archive-article-date">
+  	<time datetime="2016-07-22T00:29:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2016-07-22</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>问题：<br>执行<code>sudo dnf update</code>报错：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">上次元数据过期检查：0:27:28 前，执行于 Fri Jul 22 07:42:36 2016。 </div><div class="line">依赖关系解决。 </div><div class="line">错误：该操作将导致移除已启动的内核：kernel-core-4.5.7-202.fc23.x86_64 。</div></pre></td></tr></table></figure>
+<p>解决方法：</p>
+<p><code>sudo dnf remove python3-dnf-plugins-core -y</code></p>
+<p>参考： <a href="https://bugzilla.redhat.com/show_bug.cgi?id=1348766" target="_blank" rel="external">https://bugzilla.redhat.com/show_bug.cgi?id=1348766</a></p>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2016/07/22/fadora 23 dnf 更新错误/">展开全文 >></a>
         </p>
       
 
