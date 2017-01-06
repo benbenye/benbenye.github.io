@@ -2,7 +2,9 @@
 title: TODO-2：浏览器唤醒APP
 date: 2016-09-13 16:09
 ---
+代码块收藏
 
+<!--more-->
 
 ``` javascript
 

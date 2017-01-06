@@ -13,8 +13,10 @@ tarball url 指向不正确
 
 问题：使用`npm i --registry=https://rnpm.xxxxx.com`命令安装依赖的时候发现`registry`参数似乎不起作用，绝大多数包居然又到官方的仓库去拉取数据（包括 metadata 和 tarball），但奇怪的是居然还有两三个包是正常的到 `rnpm.xxxxx.com` 域去下载数据了。
 
-原因：因为用 `npm shrinkwrap` 命令锁定了依赖，而 `npm-shrinkwrap.json` 里有个 `resolved`字段，这个字段指定了tarball下载的地址，npm使用这个地址下载了真正的依赖包。
+<!--more-->
 
+
+原因：因为用 `npm shrinkwrap` 命令锁定了依赖，而 `npm-shrinkwrap.json` 里有个 `resolved`字段，这个字段指定了tarball下载的地址，npm使用这个地址下载了真正的依赖包。
 解决办法：目前还没有好的解决办法，暂时先替换掉`resolved`字段里的 url，npm@5之后的版本应该会提供一个优雅的解决方案。 
 s替换url的方法：
 

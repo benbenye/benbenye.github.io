@@ -11,6 +11,7 @@ date: 2016-07-22 08:29
 依赖关系解决。 
 错误：该操作将导致移除已启动的内核：kernel-core-4.5.7-202.fc23.x86_64 。
 ```
+<!--more-->
 解决方法：
 
 `sudo dnf remove python3-dnf-plugins-core -y`
