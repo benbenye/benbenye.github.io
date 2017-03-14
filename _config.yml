@@ -69,7 +69,7 @@ theme: yilia
 ## Docs: https://hexo.io/docs/deployment.html
 deploy:
   type: git
-  repo: https://github.com/benbenye/benbenye.github.io.git
+  repo: git@github.com:benbenye/benbenye.github.io.git
   branch: master
 
 jsonContent:
