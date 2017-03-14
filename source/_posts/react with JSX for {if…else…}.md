@@ -1,5 +1,6 @@
 ---
 title: react with JSX for {if…else…}
+tags: [react, jsx]
 date: 2016-05-30 15:13
 ---
 

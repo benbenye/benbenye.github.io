@@ -1,5 +1,6 @@
 ---
 title: linux 下使用n配置使用淘宝镜像
+tags: [linux, n, npm, node.js]
 date: 2016-10-29 12:16
 ---
 

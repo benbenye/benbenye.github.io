@@ -1,5 +1,6 @@
 ---
 title: fedora下yum重新安装npm失败及解决
+tags: [linux, yum, npm]
 date: 2015-04-28 18:05
 ---
 

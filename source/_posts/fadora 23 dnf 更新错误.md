@@ -1,5 +1,6 @@
 ---
 title: fadora 23 dnf 更新错误
+tags: [linux, dnf]
 date: 2016-07-22 08:29
 ---
 

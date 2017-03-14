@@ -1,5 +1,6 @@
 ---
 title: 解决fedora下webstorm中文字符不显示的问题
+tags: [linux, IDE, webstorm, 输入法]
 date: 2015-04-19 14:21
 ---
 最近新换了系统(fedra 21)，顺便把webstorm 9换成了10.发现对中文的支持出了问题：

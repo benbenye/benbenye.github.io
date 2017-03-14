@@ -1,6 +1,5 @@
 node_modules
-themes
-node_modules
 public
 .idea
 .deploy_git
+db.json

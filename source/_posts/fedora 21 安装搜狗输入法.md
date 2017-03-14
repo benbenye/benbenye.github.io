@@ -1,5 +1,6 @@
 ---
 title: fedora 21 安装搜狗输入法
+tags: linux
 date: 2015-06-24 11:07
 ---
 1.添加fedora中文社区软件源

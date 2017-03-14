@@ -1,5 +1,6 @@
 ---
 title: fedora 22 安装 elixir
+tags: [linux, elixir]
 date: 2016-03-15 19:30
 ---
 

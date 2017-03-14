@@ -1,5 +1,6 @@
 ---
 title: mongodb 基于地理位置的查询
+tags: mongodb
 date: 2016-01-08 15:33
 ---
 ####需求：

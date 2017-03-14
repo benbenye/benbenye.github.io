@@ -1,6 +1,7 @@
 ---
 title: CentOS 6.4 上安装 Python 2.7.x
 date: 2015-11-30 12:37
+tags: [linux, python]
 ---
 
 0. 去官网下载解压相应版本的源码包，我用的这个：[https://www.python.org/ftp/python/2.7.10/Python-2.7.10.tgz](https://www.python.org/ftp/python/2.7.10/Python-2.7.10.tgz)

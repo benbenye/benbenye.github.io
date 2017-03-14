@@ -1,5 +1,6 @@
 ---
 title: gnome 3 的几个桌面扩展
+tags: [linux, gnome]
 date: 2015-05-17 20:51
 ---
 周末找了几个gnome 3 下简单好用的插件：
