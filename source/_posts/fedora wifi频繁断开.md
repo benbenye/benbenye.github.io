@@ -1,5 +1,6 @@
 ---
 title: fedora wifi频繁断开
+tags: [linux, problem]
 date: 2015-04-20 17:25
 ---
 
