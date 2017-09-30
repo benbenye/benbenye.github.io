@@ -1,13 +1,14 @@
 ---
 title: 'RESTful:PATCH vs PUT'
-date: 2017-04-18 19:26:00
 author: wmzy
 tags:
   - REST
   - RESTful
   - http
   - api
+date: 2017-04-18 19:26:00
 ---
+
 
 在写 RESTful API 时，很多人分不清 PUT 和 PATCH 方法的区别，这里讲一下我的理解。
 
