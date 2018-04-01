@@ -1,29 +1,67 @@
 <template>
   <div id="app">
+    <template v-if="!Data.token">
+      <input type="text" placeholder="请填写您的 github token，已确认您的身份" v-model="token">
+      <div class="btn" @click="setToken">提交</div>
+    </template>
     <div id="nav">
-      <router-link to="/">Home</router-link> |
-      <router-link to="/about">About</router-link>
+      <router-link to="/">Home</router-link>
     </div>
     <router-view/>
   </div>
 </template>
 
-<style lang="scss">
-#app {
-  font-family: "Avenir", Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-}
-#nav {
-  padding: 30px;
-  a {
-    font-weight: bold;
-    color: #2c3e50;
-    &.router-link-exact-active {
-      color: #42b983;
+<script>
+import Data from "./store/data";
+import http from "./utils/client-axios";
+export default {
+  name: "App",
+  data() {
+    return {
+      token: "",
+      Data: Data
+    };
+  },
+  mounted() {
+    Data.token = this.token = localStorage.getItem("github-token");
+  },
+  methods: {
+    setToken: function() {
+      this.testToken().then(res => {
+        if (res === "ok") {
+          Data.token = this.token;
+          localStorage.setItem("github-token", this.token);
+          alert("token is ok");
+        } else {
+          alert("sorry, you hav'nt access to this blog");
+        }
+      });
+    },
+    testToken: function() {
+      return http()
+        .get("/repos/benbenye/git-blog/contents/test-token")
+        .then(res => {
+          return http(this.token).put(
+            "/repos/benbenye/git-blog/contents/test-token",
+            {
+              message: "test token",
+              sha: res.data.sha,
+              content: ""
+            }
+          );
+        })
+        .then(res => {
+          if (res.status < 300) {
+            return "ok";
+          } else {
+            return "fail";
+          }
+        });
     }
   }
-}
+};
+</script>
+
+<style lang="scss" type="text/scss">
+@import "./common/scss/base";
 </style>
