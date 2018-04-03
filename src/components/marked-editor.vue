@@ -1,10 +1,17 @@
 <template>
   <div id="editor">
-    <textarea v-model="input" @input="updateContent"></textarea>
-    <div v-html="compiledMarkdown"></div>
-    <input type="text" v-model="title" v-if="type === 'create'">
-    <div id="update" @click="update" v-if="type === 'edit'">更新</div>
-    <div id="create" @click="create" v-else>新建</div>
+    <template v-if="type === 'edit'">
+      <textarea v-model="input" @input="updateContent"></textarea>
+      <div v-html="compiledMarkdown"></div>
+      <div id="update" @click="update">更新</div>
+    </template>
+    <template v-else>
+      <textarea v-model="createInput" @input="updateCreateContent"></textarea>
+      <div v-html="compiledMarkdown"></div>
+      <input type="text" v-model="title" placeholder="文章标题">
+      <div id="create" @click="create">新建</div>
+    </template>
+    <textarea v-model="commitMes"></textarea>
   </div>
 </template>
 
@@ -21,17 +28,24 @@ export default {
       required: true
     },
     type: {
-      type: String
+      type: String,
+      required: true //edit|create
     }
   },
   data() {
     return {
-      input: decodeURIComponent(escape(atob(this.editor.content))),
-      title: "unnamed.md"
+      input:
+        this.type === "edit" &&
+        decodeURIComponent(escape(atob(this.editor.content))),
+      createInput: "",
+      title: "unnamed.md",
+      commitMes: "commit"
     };
   },
   computed: {
     compiledMarkdown: function() {
+      if (this.type === "create") return "";
+
       return marked(this.input, { sanitize: true });
     }
   },
@@ -39,9 +53,12 @@ export default {
     updateContent: _.debounce(function(e) {
       this.input = e.target.value;
     }, 300),
+    updateCreateContent: _.debounce(function(e) {
+      this.createInput = e.target.value;
+    }, 300),
     update: function() {
       http().put(`/repos/benbenye/git-blog/contents/${this.editor.path}`, {
-        message: "test",
+        message: this.commitMes,
         sha: this.editor.sha,
         content: btoa(unescape(encodeURIComponent(this.input)))
       });
@@ -49,8 +66,8 @@ export default {
     create: function() {
       http().put(`/repos/benbenye/git-blog/contents/${this.title}`, {
         path: this.title,
-        message: "test",
-        content: btoa(unescape(encodeURIComponent(this.input)))
+        message: this.commitMes,
+        content: btoa(unescape(encodeURIComponent(this.createInput)))
       });
     }
   }

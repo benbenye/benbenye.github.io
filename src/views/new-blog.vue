@@ -1,6 +1,6 @@
 <template>
   <div class="new">
-    <marked-editor :editor="editor"></marked-editor>
+    <marked-editor :editor="editor" :type="'create'"></marked-editor>
   </div>
 </template>
 
@@ -13,7 +13,9 @@ export default {
     MarkedEditor
   },
   data() {
-    return {};
+    return {
+      editor: {}
+    };
   }
 };
 </script>
