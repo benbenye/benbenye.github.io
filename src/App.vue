@@ -35,7 +35,7 @@ export default {
           localStorage.setItem("github-token", this.token);
           alert("token is ok");
         } else {
-          alert("sorry, you hav'nt access to this blog");
+          alert("sorry, you haven't access to this blog");
         }
       });
     },
@@ -52,12 +52,11 @@ export default {
             }
           );
         })
-        .then(res => {
-          if (res.status < 300) {
-            return "ok";
-          } else {
-            return "fail";
-          }
+        .then(() => {
+          return "ok";
+        })
+        .catch(() => {
+          return false;
         });
     }
   }
