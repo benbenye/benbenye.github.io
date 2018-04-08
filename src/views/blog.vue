@@ -1,21 +1,23 @@
 <template>
-  <div class="editor">
-    <marked-editor v-if="contents" :editor.sync="contents" :type="type"></marked-editor>
+  <div class="blog">
+    <div v-html="html"></div>
+    <comment></comment>
   </div>
 </template>
 <script>
+import marked from "marked";
 import http from "../utils/client-axios";
+import Comment from "../components/comment.vue";
 import config from "../config";
-import MarkedEditor from "../components/marked-editor.vue";
 
 export default {
   components: {
-    MarkedEditor
+    Comment
   },
   data() {
     return {
       contents: null,
-      type: "edit"
+      html: ""
     };
   },
   mounted() {
@@ -24,6 +26,10 @@ export default {
       .then(res => {
         if (res.status <= 299) {
           this.contents = res.data;
+          this.html = marked(
+            decodeURIComponent(escape(atob(this.contents.content))),
+            { sanitize: true }
+          );
         }
       });
   }

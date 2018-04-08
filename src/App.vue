@@ -14,11 +14,13 @@
 <script>
 import Data from "./store/data";
 import http from "./utils/client-axios";
+import config from "./config";
+
 export default {
   name: "App",
   data() {
     return {
-      token: "",
+      token: Data.token,
       Data: Data
     };
   },
@@ -39,10 +41,10 @@ export default {
     },
     testToken: function() {
       return http()
-        .get("/repos/benbenye/git-blog/contents/test-token")
+        .get(`${config.repoPath}/contents/test-token`)
         .then(res => {
           return http(this.token).put(
-            "/repos/benbenye/git-blog/contents/test-token",
+            `${config.repoPath}/contents/test-token`,
             {
               message: "test token",
               sha: res.data.sha,

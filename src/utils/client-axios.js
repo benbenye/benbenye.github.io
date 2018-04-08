@@ -5,7 +5,8 @@ import axios from "axios";
 
 export default function(token = localStorage.getItem("github-token")) {
   let headers = {
-    Accept: "application/vnd.github.black-panther-preview+json",
+    Accept:
+      "application/vnd.github.black-panther-preview+json application/vnd.github.symmetra-preview+json",
     "Content-type": "application/json"
   };
   if (token) {

@@ -19,6 +19,7 @@
 import marked from "marked";
 import _ from "lodash";
 import http from "../utils/client-axios";
+import config from "../config";
 
 export default {
   name: "MarkedEditor",
@@ -57,14 +58,14 @@ export default {
       this.createInput = e.target.value;
     }, 300),
     update: function() {
-      http().put(`/repos/benbenye/git-blog/contents/${this.editor.path}`, {
+      http().put(`${config.repoPath}/contents/${this.editor.path}`, {
         message: this.commitMes,
         sha: this.editor.sha,
         content: btoa(unescape(encodeURIComponent(this.input)))
       });
     },
     create: function() {
-      http().put(`/repos/benbenye/git-blog/contents/${this.title}`, {
+      http().put(`${config.repoPath}/contents/${this.title}`, {
         path: this.title,
         message: this.commitMes,
         content: btoa(unescape(encodeURIComponent(this.createInput)))
