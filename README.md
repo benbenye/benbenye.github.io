@@ -1,10 +1,11 @@
 # benbenye.github.io
 some intrest games collections &amp; Our blog
 
---- 博客启动依赖个人token
+* 博客启动依赖个人token *
 graphQL版本特点：
-* 可以获取多种版本的文件内容`body` `bodyHTML``bodyText`
+* 可以获取多种版本的文件内容`body` `bodyHTML` `bodyText`
 * 可以快速根据个人需求更改需要的字段，所查即所得
+
 可配置项：
 
 # 项目简介
@@ -16,7 +17,7 @@ graphQL版本特点：
 同步github的用户系统
 
 # 环境依赖
-[![Node version](https://img.shields.io/node/v/[NPM-MODULE-NAME].svg?style=flat)](http://nodejs.org/download/)
+[![Node version](https://img.shields.io/node/v/[node.js].svg?style=flat)](http://nodejs.org/download/)
 
 # 部署步骤
 ```
@@ -39,8 +40,8 @@ v0.1.0(2019-1-15)
 * 评论功能
 * 个人简介
 
-声明
+# 声明
 ## Contributing [![contributions welcome](https://img.shields.io/badge/contributions-welcome-brightgreen.svg?style=flat)](https://github.com/benbenye/git-blog/issues)
 
-协议
+# 协议
 MIT
