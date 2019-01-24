@@ -11,10 +11,10 @@
  * See https://goo.gl/2aRDsh
  */
 
-importScripts("https://storage.googleapis.com/workbox-cdn/releases/3.0.1/workbox-sw.js");
+importScripts("https://storage.googleapis.com/workbox-cdn/releases/3.6.3/workbox-sw.js");
 
 importScripts(
-  "/precache-manifest.5abb2a44570358e402c0b8ad593abf14.js"
+  "/precache-manifest.59526f1bef86c94e8ac2ec55cde68672.js"
 );
 
 workbox.core.setCacheNameDetails({prefix: "git-blog"});
